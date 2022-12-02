@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.springboot.mycgv.mapper.BoardMapper">
+	 
+	 <select id="getList"  parameterType="com.springboot.mycgv.dto.BoardDto" resultType="com.springboot.mycgv.dto.BoardDto"  > 
+		 select rno, bid, btitle, bhits, bdate
+				from(select rownum rno, bid, btitle, bhits, bdate  
+					from (select bid, btitle, bhits, bdate from CGV_BOARD order by bdate desc))
+			 where rno between #{startCount} and #{endCount}  
+	 </select>
+	 
+	 <insert id="getWrite" parameterType="com.springboot.mycgv.dto.BoardDto">
+	 		insert into cgv_board values('b_'||sequ_cgv_board.nextval,#{btitle},#{bcontent},#{bfile},#{bsfile},0,sysdate) 
+	 </insert>
+	 
+	 <select id="getContent" parameterType="java.lang.String" resultType="com.springboot.mycgv.dto.BoardDto" >
+	 	select bid, btitle, bcontent, bfile, bsfile, bhits, bdate  
+	 		from cgv_board 
+	 			where bid=#{bid}
+	 </select>
+	 
+	 <update id="getUpdate" parameterType="com.springboot.mycgv.dto.BoardDto">
+		update cgv_board set btitle=#{btitle}, bcontent=#{bcontent}, bfile=#{bfile}, bsfile=#{bsfile} where bid =#{bid}	
+	</update>
+	
+	<delete id="getDelete" parameterType="com.springboot.mycgv.dto.BoardDto">
+		delete from cgv_board  where bid =#{bid}	
+	</delete>
+	
+	
+	
+	
+	
+</mapper>
